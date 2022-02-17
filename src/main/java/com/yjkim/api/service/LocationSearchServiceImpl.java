@@ -32,7 +32,7 @@ public class LocationSearchServiceImpl implements LocationSearchService {
         //네이버 장소 검색 API 호출.
         List<LocationSearch.commonResponse> naverLocList = externalApiService.getNaverLocationSearch(keyword);
 
-        //네이버 -> 카카오 데이터 통일.
+        //필수 vo 값 변환(네이버 -> 카카오).
         for (LocationSearch.commonResponse one : naverLocList) {
             modifyAddressName(one);
             modifyPlaceName(one);
@@ -66,6 +66,11 @@ public class LocationSearchServiceImpl implements LocationSearchService {
         return result;
     }
 
+    /**
+     * 네이버 가게 이름 태그 제거.
+     *
+     * @param one 네이버 장소 검색 값.
+     */
     public void modifyPlaceName(LocationSearch.commonResponse one) {
         //태그 제거.
         one.setPlaceName(one.getPlaceName().replaceAll("<[^>]*>", ""));
