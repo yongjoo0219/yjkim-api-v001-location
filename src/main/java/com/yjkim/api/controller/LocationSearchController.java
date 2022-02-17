@@ -40,7 +40,9 @@ public class LocationSearchController {
      */
     @GetMapping(value = "/location/search")
     public ApiResponse getLocationSearch(@RequestParam String keyword) {
-        List<LocationSearch> list = locationSearchService.getLocationSearch(keyword);
-        return new ApiResponse();
+        List<LocationSearch.commonResponse> list = locationSearchService.getLocationSearch(keyword);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResultData(list);
+        return apiResponse;
     }
 }

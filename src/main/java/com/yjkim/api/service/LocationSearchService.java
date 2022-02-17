@@ -16,5 +16,7 @@ public interface LocationSearchService {
      * @param keyword 장소 키워드.
      * @return 장소 검색 리스트
      */
-    List<LocationSearch> getLocationSearch(String keyword);
+    List<LocationSearch.commonResponse> getLocationSearch(String keyword);
+
+
 }

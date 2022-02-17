@@ -19,6 +19,10 @@ config:
   kakao:
     url: http://dapi.kakao.com
     api-key: KakaoAK 5ee6a8608905a09709f24f7941701bf6
+  naver:
+    url: https://openapi.naver.com
+    client-id: xBXFUoSBYboasKPaoA9g
+    client-secret: ZH8FVv2xPq
 
 ---
 spring:

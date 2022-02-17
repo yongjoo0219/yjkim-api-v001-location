@@ -1,159 +1,72 @@
 package com.yjkim.api.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+import java.util.List;
 
 /**
  * LocationSearch 모델.
  *
  * @author werbwerb@naver.com
  */
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LocationSearch {
-    /* 검색한 키워드 */
-    private String keyword;
-
-    /* 장소 이름 */
-    @JsonAlias({"place_name", "title"})
-    private String placeName;
-
-    /* 카테고리 */
-    @JsonAlias({"category_name", "category"})
-    private String categoryName;
-
-    /* 장소 링크 */
-    @JsonAlias({"place_url", "link"})
-    private String placeUrl;
-
-    /* 주소 */
-    @JsonAlias({"address_name", "address"})
-    private String address;
-
-    /* 도로명 주소 */
-    @JsonAlias({"road_address_name", "roadAddress"})
-    private String roadAddress;
-
-    /* 장소 번호 */
-    @JsonAlias({"phone", "telephone"})
-    private String phone;
-
-    /* X좌표 */
-    private String x;
-
-    /* Y좌표 */
-    private String y;
-
-    /* 카텍 X좌표 */
-    @JsonAlias({"mapx"})
-    private int katechX;
-
-    /* 카텍 Y좌표 */
-    @JsonAlias({"mapy"})
-    private int katechY;
-
-    public String getKeyword() {
-        return keyword;
+    @Data
+    public static class commonResponse {
+        private String placeName; /* 장소 이름 */
+        private String placeUrl; /* 장소 링크 */
+        private String category; /* 카테고리 */
+        private String address; /* 기본 주소 */
+        private String roadAddress; /* 도로명 주소 */
+        private String phone; /* 장소 번호 */
+        private String x; /* X 좌표 */
+        private String y; /* Y 좌표 */
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    @Data
+    public static class KaKaoLocationResponse {
+        private List<Documents> documents; /* 조회 값 리스트 */
     }
 
-    public String getPlaceName() {
-        return placeName;
+    @Data
+    public static class Documents {
+        @JsonProperty(value = "place_name")
+        private String placeName; /* 장소 이름 */
+        @JsonProperty(value = "place_url")
+        private String placeUrl; /* 장소 링크 */
+        @JsonProperty(value = "category_name")
+        private String category; /* 카테고리 */
+        @JsonProperty(value = "address_name")
+        private String address; /* 기본 주소 */
+        @JsonProperty(value = "road_address_name")
+        private String roadAddress; /* 도로명 주소 */
+        private String phone; /* 장소 번호 */
+        private String x; /* X 좌표 */
+        private String y; /* Y 좌표 */
     }
 
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
+    @Data
+    public static class NaverLocationResponse {
+        private List<Items> items; /* 조회 값 리스트 */
     }
 
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public String getPlaceUrl() {
-        return placeUrl;
-    }
-
-    public void setPlaceUrl(String placeUrl) {
-        this.placeUrl = placeUrl;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getRoadAddress() {
-        return roadAddress;
-    }
-
-    public void setRoadAddress(String roadAddress) {
-        this.roadAddress = roadAddress;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getX() {
-        return x;
-    }
-
-    public void setX(String x) {
-        this.x = x;
-    }
-
-    public String getY() {
-        return y;
-    }
-
-    public void setY(String y) {
-        this.y = y;
-    }
-
-    public int getKatechX() {
-        return katechX;
-    }
-
-    public void setKatechX(int katechX) {
-        this.katechX = katechX;
-    }
-
-    public int getKatechY() {
-        return katechY;
-    }
-
-    public void setKatechY(int katechY) {
-        this.katechY = katechY;
-    }
-
-    @Override
-    public String toString() {
-        return "LocationSearch{" +
-                "keyword='" + keyword + '\'' +
-                ", placeName='" + placeName + '\'' +
-                ", categoryName='" + categoryName + '\'' +
-                ", placeUrl='" + placeUrl + '\'' +
-                ", address='" + address + '\'' +
-                ", roadAddress='" + roadAddress + '\'' +
-                ", phone='" + phone + '\'' +
-                ", x='" + x + '\'' +
-                ", y='" + y + '\'' +
-                ", katechX=" + katechX +
-                ", katechY=" + katechY +
-                '}';
+    @Data
+    public static class Items {
+        @JsonProperty(value = "title")
+        private String placeName; /* 장소 이름 */
+        @JsonProperty(value = "link")
+        private String placeUrl; /* 장소 링크 */
+        private String category; /* 카테고리 */
+        private String address; /* 기본 주소 */
+        private String roadAddress; /* 도로명 주소 */
+        @JsonProperty(value = "telephone")
+        private String phone; /* 장소 번호 */
+        @JsonProperty(value = "mapx")
+        private int x; /* X 좌표 */
+        @JsonProperty(value = "mapy")
+        private int y; /* Y 좌표 */
     }
 }
