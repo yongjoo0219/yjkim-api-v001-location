@@ -24,10 +24,6 @@ spring:
     url: jdbc:h2:mem:testdb
     username: yjkim
     password: test1234
-  sql:
-    init:
-      schema-locations: classpath:static/*.sql
-      mode: always
 config:
   kakao:
     url: http://dapi.kakao.com

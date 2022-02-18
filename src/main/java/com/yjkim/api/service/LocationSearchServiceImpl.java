@@ -1,6 +1,6 @@
 package com.yjkim.api.service;
 
-import com.yjkim.api.model.LocationSearch;
+import com.yjkim.api.model.LocationSearchVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,40 +26,40 @@ public class LocationSearchServiceImpl implements LocationSearchService {
     ExternalApiService externalApiService;
 
     @Override
-    public List<LocationSearch.commonResponse> getLocationSearch(String keyword) {
+    public List<LocationSearchVO.commonResponse> getLocationSearch(String keyword) {
         //카카오 장소 검색 API 호출.
-        List<LocationSearch.commonResponse> kakaoLocList = externalApiService.getKaKaoLocationSearch(keyword);
+        List<LocationSearchVO.commonResponse> kakaoLocList = externalApiService.getKaKaoLocationSearch(keyword);
         //네이버 장소 검색 API 호출.
-        List<LocationSearch.commonResponse> naverLocList = externalApiService.getNaverLocationSearch(keyword);
+        List<LocationSearchVO.commonResponse> naverLocList = externalApiService.getNaverLocationSearch(keyword);
 
         //필수 vo 값 변환(네이버 -> 카카오).
-        for (LocationSearch.commonResponse one : naverLocList) {
+        for (LocationSearchVO.commonResponse one : naverLocList) {
             modifyAddressName(one);
             modifyPlaceName(one);
-            List<LocationSearch.commonResponse> wsg = externalApiService.modifyKatecToWGS84(one);
+            List<LocationSearchVO.commonResponse> wsg = externalApiService.modifyKatecToWGS84(one);
             one.setX(wsg.get(0).getX());
             one.setY(wsg.get(0).getY());
         }
 
         //중복 값 추출.
-        List<LocationSearch.commonResponse> sameResult = naverLocList.stream()
+        List<LocationSearchVO.commonResponse> sameResult = naverLocList.stream()
                 .filter(oneNaver -> kakaoLocList.stream().anyMatch(oneKaKao -> oneNaver.getPlaceName().replace(" ", "")
                         .contains(oneKaKao.getPlaceName().split(" ")[0]) && oneNaver.getAddress().equals(oneKaKao.getAddress())))
                 .collect(Collectors.toList());
 
         //중복 되지 않은 카카오 값 추출.
-        List<LocationSearch.commonResponse> kakoResult = kakaoLocList.stream()
+        List<LocationSearchVO.commonResponse> kakoResult = kakaoLocList.stream()
                 .filter(oneKaKao -> naverLocList.stream().noneMatch(oneNaver -> oneNaver.getPlaceName().replace(" ", "")
                         .contains(oneKaKao.getPlaceName().split(" ")[0]) && oneKaKao.getAddress().equals(oneNaver.getAddress())))
                 .collect(Collectors.toList());
 
         //중복 되지 않은 네이버 값 추출.
-        List<LocationSearch.commonResponse> naverResult = naverLocList.stream()
+        List<LocationSearchVO.commonResponse> naverResult = naverLocList.stream()
                 .filter(oneNaver -> kakaoLocList.stream().noneMatch(oneKaKao -> oneNaver.getPlaceName().replace(" ", "")
                         .contains(oneKaKao.getPlaceName().split(" ")[0]) && oneNaver.getAddress().equals(oneKaKao.getAddress())))
                 .collect(Collectors.toList());
 
-        List<LocationSearch.commonResponse> result = new ArrayList<>();
+        List<LocationSearchVO.commonResponse> result = new ArrayList<>();
         result.addAll(sameResult);
         result.addAll(kakoResult);
         result.addAll(naverResult);
@@ -71,7 +71,7 @@ public class LocationSearchServiceImpl implements LocationSearchService {
      *
      * @param one 네이버 장소 검색 값.
      */
-    public void modifyPlaceName(LocationSearch.commonResponse one) {
+    public void modifyPlaceName(LocationSearchVO.commonResponse one) {
         //태그 제거.
         one.setPlaceName(one.getPlaceName().replaceAll("<[^>]*>", ""));
     }
@@ -81,7 +81,7 @@ public class LocationSearchServiceImpl implements LocationSearchService {
      *
      * @param one 네이버 장소 검색 결과.
      */
-    public void modifyAddressName(LocationSearch.commonResponse one) {
+    public void modifyAddressName(LocationSearchVO.commonResponse one) {
         String address = one.getAddress();
         //경기도 등.
         if (address.startsWith("경기도")) one.setAddress("경기" + address.substring(3));

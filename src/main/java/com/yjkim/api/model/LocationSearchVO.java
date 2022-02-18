@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LocationSearch {
+public class LocationSearchVO {
     @Data
     public static class commonResponse {
         private String placeName; /* 장소 이름 */

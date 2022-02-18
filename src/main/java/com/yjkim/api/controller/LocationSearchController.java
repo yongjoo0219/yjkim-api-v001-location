@@ -1,7 +1,8 @@
 package com.yjkim.api.controller;
 
 import com.yjkim.api.model.ApiResponse;
-import com.yjkim.api.model.LocationSearch;
+import com.yjkim.api.model.LocationSearchVO;
+import com.yjkim.api.service.KeywordService;
 import com.yjkim.api.service.LocationSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,11 @@ public class LocationSearchController {
      */
     @Autowired
     LocationSearchService locationSearchService;
+    /**
+     * KeywordService,
+     */
+    @Autowired
+    KeywordService keywordService;
 
     /**
      * [YJKIM-API-001] 장소 검색.
@@ -40,7 +46,11 @@ public class LocationSearchController {
      */
     @GetMapping(value = "/location/search")
     public ApiResponse getLocationSearch(@RequestParam String keyword) {
-        List<LocationSearch.commonResponse> list = locationSearchService.getLocationSearch(keyword);
+        //DB에 키워드 값 세팅.
+        keywordService.addKeyword(keyword);
+
+        //장소 검색 결과 조회.
+        List<LocationSearchVO.commonResponse> list = locationSearchService.getLocationSearch(keyword);
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResultData(list);
         return apiResponse;
