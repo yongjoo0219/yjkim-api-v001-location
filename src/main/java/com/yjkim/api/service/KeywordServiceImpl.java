@@ -5,8 +5,8 @@ import com.yjkim.api.model.KeywordVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,13 +28,27 @@ public class KeywordServiceImpl implements KeywordService {
     KeywordDao keywordDao;
 
     @Override
-    public void addKeyword(String keyword) {
-        List<KeywordVO> keywordList = keywordDao.getKeyword(keyword);
-        if(keywordList.isEmpty()) {
-            keywordDao.addKeyword(keyword);
+    @Transactional(rollbackFor = Exception.class)
+    public synchronized void addKeyword(String keyword) {
+        String trimKeyword = keyword.replace(" ", "");
+
+        List<KeywordVO> keywordList = keywordDao.getKeyword(trimKeyword);
+        if (keywordList.isEmpty()) {
+            keywordDao.addKeyword(trimKeyword);
         }
-        if(!keywordList.isEmpty()) {
-            LOGGER.debug("UPDATE >> ");
+        if (!keywordList.isEmpty()) {
+            LOGGER.debug("UPDATE >> word:{}, cnt:{}", keywordList.get(0).getWord()
+                    , keywordList.get(0).getCnt());
+
+            KeywordVO updateKeyword = new KeywordVO();
+            updateKeyword.setWord(keywordList.get(0).getWord());
+            updateKeyword.setCnt(keywordList.get(0).getCnt() + 1);
+            keywordDao.modifyKeyword(updateKeyword);
         }
+    }
+
+    @Override
+    public List<KeywordVO> getKeywordRank() {
+        return keywordDao.getKeywordRank();
     }
 }

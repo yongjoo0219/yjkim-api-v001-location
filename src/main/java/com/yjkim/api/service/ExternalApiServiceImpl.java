@@ -107,7 +107,6 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         LocationSearchVO.KaKaoLocationResponse kakaoResponse = restTemplateUtil.restTemplate(url, HttpMethod.GET, headers, null,
                 "[KAKAO] > GET_WSG_TARGET", LocationSearchVO.KaKaoLocationResponse.class);
         List<LocationSearchVO.Documents> documents = kakaoResponse.getDocuments();
-        List<LocationSearchVO.commonResponse> commonList;
         return objectUtils.getListMapper(new Gson().toJson(documents), LocationSearchVO.commonResponse.class);
     }
 }
