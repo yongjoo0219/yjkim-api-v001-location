@@ -37,9 +37,6 @@ public class KeywordServiceImpl implements KeywordService {
             keywordDao.addKeyword(trimKeyword);
         }
         if (!keywordList.isEmpty()) {
-            LOGGER.debug("UPDATE >> word:{}, cnt:{}", keywordList.get(0).getWord()
-                    , keywordList.get(0).getCnt());
-
             KeywordVO updateKeyword = new KeywordVO();
             updateKeyword.setWord(keywordList.get(0).getWord());
             updateKeyword.setCnt(keywordList.get(0).getCnt() + 1);
