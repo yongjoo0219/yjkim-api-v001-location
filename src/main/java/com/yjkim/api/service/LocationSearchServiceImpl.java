@@ -43,20 +43,20 @@ public class LocationSearchServiceImpl implements LocationSearchService {
 
         //중복 값 추출.
         List<LocationSearch.commonResponse> sameResult = naverLocList.stream()
-                .filter(oneNaver -> kakaoLocList.stream().anyMatch(oneKaKao -> oneNaver.getPlaceName().contains(oneKaKao.getPlaceName().split(" ")[0])
-                        && oneNaver.getAddress().equals(oneKaKao.getAddress())))
+                .filter(oneNaver -> kakaoLocList.stream().anyMatch(oneKaKao -> oneNaver.getPlaceName().replace(" ", "")
+                        .contains(oneKaKao.getPlaceName().split(" ")[0]) && oneNaver.getAddress().equals(oneKaKao.getAddress())))
                 .collect(Collectors.toList());
 
         //중복 되지 않은 카카오 값 추출.
         List<LocationSearch.commonResponse> kakoResult = kakaoLocList.stream()
-                .filter(oneKaKao -> naverLocList.stream().noneMatch(oneNaver -> oneNaver.getPlaceName().contains(oneKaKao.getPlaceName().split(" ")[0])
-                        && oneKaKao.getAddress().equals(oneNaver.getAddress())))
+                .filter(oneKaKao -> naverLocList.stream().noneMatch(oneNaver -> oneNaver.getPlaceName().replace(" ", "")
+                        .contains(oneKaKao.getPlaceName().split(" ")[0]) && oneKaKao.getAddress().equals(oneNaver.getAddress())))
                 .collect(Collectors.toList());
 
         //중복 되지 않은 네이버 값 추출.
         List<LocationSearch.commonResponse> naverResult = naverLocList.stream()
-                .filter(oneNaver -> kakaoLocList.stream().noneMatch(oneKaKao -> oneNaver.getPlaceName().contains(oneKaKao.getPlaceName().split(" ")[0])
-                        && oneNaver.getAddress().equals(oneKaKao.getAddress())))
+                .filter(oneNaver -> kakaoLocList.stream().noneMatch(oneKaKao -> oneNaver.getPlaceName().replace(" ", "")
+                        .contains(oneKaKao.getPlaceName().split(" ")[0]) && oneNaver.getAddress().equals(oneKaKao.getAddress())))
                 .collect(Collectors.toList());
 
         List<LocationSearch.commonResponse> result = new ArrayList<>();
