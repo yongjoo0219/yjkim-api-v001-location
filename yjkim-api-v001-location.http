@@ -1,0 +1,13 @@
+#[YJKIM-API-001] 장소 검색.
+#RequestParam: keyword
+GET http://localhost:8002/yjkim/api/v1/location/search?keyword=수지구청역 은행
+Accept: application/json
+
+###
+#[YJKIM-API-002] 키워드 Top10 조회.
+GET http://localhost:8002/yjkim/api/v1/keyword/rank
+Accept: application/json
+
+
+
+
